@@ -1,0 +1,61 @@
+package net.qdevzone.docunit.excel;
+
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
+
+import net.qdevzone.docunit.AbstractDocAssert;
+import net.qdevzone.docunit.DocumentAssert;
+
+public class ExcelAssertions extends AbstractDocAssert<ExcelAssertions> {
+    private final Workbook document;
+    private final DocumentAssert base;
+    private Throwable loadError;
+
+    public ExcelAssertions(DocumentAssert base) {
+        super(ExcelAssertions.class);
+        Workbook loadadDoc = null;
+        try {
+            loadadDoc = WorkbookFactory.create(new ByteArrayInputStream(base.actual()));
+        }
+        catch (IOException | NullPointerException ex) {
+            loadError = ex;
+        }
+        this.document = loadadDoc;
+        this.base = base;
+    }
+
+    @Override
+    public ExcelAssertions isValid() {
+        if (loadError != null) {
+            throw failure("unloadable document: %s", loadError.getMessage());
+        }
+        if (document == null) {
+            throw failure("document loader returned null");
+        }
+        return this;
+    }
+
+    @Override
+    public ExcelAssertions isNotValid() {
+        if (loadError == null && document != null) {
+            throw failure("document was valid");
+        }
+        return this;
+    }
+
+    public ExcelAssertions hasSheetCount(int expected) {
+        if (document.getNumberOfSheets() != expected) {
+            throw failure("sheet count %d differs from expected %d", document.getNumberOfSheets(), expected);
+        }
+
+        return this;
+    }
+
+    @Override
+    public byte[] actual() {
+        return base.actual();
+    }
+}

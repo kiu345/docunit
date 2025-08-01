@@ -1,0 +1,44 @@
+= DocUnit
+:toc:
+:icons: font
+:source-highlighter: highlightjs
+:sectnums:
+
+A fluent assertion library for testing document content in JUnit, designed for structured formats like PDF, XML, Word and Excel.
+
+Right now is's more or less a quick hack, for basic usage see check the JUnit test files.
+
+== Features
+
+* Fluent assertions on `byte[]`-based document content
+* Supported formats:
+** Text
+** Word (DOCX)
+** Excel (XLSX)
+** PDF
+** XML
+
+== Example Usage
+
+```java
+assertDoc(pdfBytes)
+    .asPDF()
+    .hasText("Rechnung")
+    .hasPageCount(1);
+
+assertDoc(xmlBytes)
+    .asXml()
+    .hasXPath("//total", "100.00")
+    .hasRootElement("invoice");
+
+assertDoc(jsonBytes)
+    .asJSON()
+    .hasJsonPath("$.user.id", "42");
+```
+
+WARNING: alpha/wip/poc code
+
+== Planned
+
+* more checks
+* image formats
