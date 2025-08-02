@@ -1,4 +1,4 @@
-package net.qdevzone.docunit.excel;
+package net.qdevzone.docunit.spreadsheet;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -49,6 +49,17 @@ public class ExcelAssertions extends AbstractDocAssert<ExcelAssertions> {
     public ExcelAssertions hasSheetCount(int expected) {
         if (document.getNumberOfSheets() != expected) {
             throw failure("sheet count %d differs from expected %d", document.getNumberOfSheets(), expected);
+        }
+
+        return this;
+    }
+
+    public ExcelAssertions hasCellValue(int sheetId, int h, int v, String expected) {
+        var sheet = document.getSheetAt(sheetId);
+        String actual = sheet.getRow(v).getCell(v).getStringCellValue();
+
+        if (!actual.equals(expected)) {
+            throw failure("cell value %s differs from expected %s", actual, expected);
         }
 
         return this;

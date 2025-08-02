@@ -11,6 +11,9 @@
     <properties>
         <java.version>17</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <poi.version>5.4.1</poi.version>
+        <tika.version>3.2.1</tika.version>
+        <twelvemonkeys.imageio.version>3.12.0</twelvemonkeys.imageio.version>
     </properties>
 
     <dependencies>
@@ -25,29 +28,60 @@
             <version>3.27.3</version>
         </dependency>
         <dependency>
-          <groupId>org.apache.pdfbox</groupId>
-          <artifactId>pdfbox</artifactId>
-          <version>3.0.5</version>
-          <optional>true</optional>
+            <groupId>org.apache.pdfbox</groupId>
+            <artifactId>pdfbox</artifactId>
+            <version>3.0.5</version>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.xmlunit</groupId>
+            <artifactId>xmlunit-core</artifactId>
+            <version>2.10.3</version>
+            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi</artifactId>
-            <version>5.4.1</version>
+            <version>${poi.version}</version>
             <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi-ooxml</artifactId>
-            <version>5.4.1</version>
+            <version>${poi.version}</version>
             <optional>true</optional>
         </dependency>
-<dependency>
-    <groupId>org.xmlunit</groupId>
-    <artifactId>xmlunit-core</artifactId>
-    <version>2.10.3</version>
-            <optional>true</optional>
-</dependency>
+        <dependency>
+            <groupId>org.apache.tika</groupId>
+            <artifactId>tika-core</artifactId>
+            <version>${tika.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.tika</groupId>
+            <artifactId>tika-parsers</artifactId>
+            <version>${tika.version}</version>
+            <type>pom</type>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.tika</groupId>
+            <artifactId>tika-parsers-standard-package</artifactId>
+            <version>${tika.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.twelvemonkeys.imageio</groupId>
+            <artifactId>imageio-jpeg</artifactId>
+            <version>${twelvemonkeys.imageio.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.twelvemonkeys.imageio</groupId>
+            <artifactId>imageio-webp</artifactId>
+            <version>${twelvemonkeys.imageio.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.twelvemonkeys.imageio</groupId>
+            <artifactId>imageio-pdf</artifactId>
+            <version>${twelvemonkeys.imageio.version}</version>
+        </dependency>
     </dependencies>
 
     <build>

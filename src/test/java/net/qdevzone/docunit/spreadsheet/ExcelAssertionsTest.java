@@ -1,4 +1,4 @@
-package net.qdevzone.docunit.doc;
+package net.qdevzone.docunit.spreadsheet;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -11,19 +11,19 @@ import org.junit.jupiter.api.Test;
 
 import net.qdevzone.docunit.DocAssertions;
 
-class WordAssertionsTest {
+class ExcelAssertionsTest {
 
     byte[] filedata;
 
     @BeforeEach
     void setUp() throws Exception {
-        filedata = Files.readAllBytes(Path.of("src", "test", "resources", "files", "test.docx"));
+        filedata = Files.readAllBytes(Path.of("src", "test", "resources", "files", "test.xlsx"));
     }
 
     @Test
     void testDocumentLoad() {
         DocAssertions.assertDoc(filedata)
-            .asWord()
+            .asExcel()
             .isValid();
     }
 
@@ -31,32 +31,42 @@ class WordAssertionsTest {
     void testDocumentLoadFailNull() {
         Throwable ex = assertThrows(AssertionError.class, () -> {
             DocAssertions.assertDoc((byte[]) null)
-                .asWord()
+                .asExcel()
                 .isValid();
         });
         Logger.getGlobal().info(ex.getMessage());
     }
 
     @Test
-    void testDocumentPageCount() {
+    void testSheetCount() {
         DocAssertions.assertDoc(filedata)
-            .asWord()
-            .hasPageCount(1);
+            .asExcel()
+            .hasSheetCount(1);
     }
 
     @Test
-    void testDocumentPageContains() {
-        DocAssertions.assertDoc(filedata)
-            .asWord()
-            .hasContent("Test");
-    }
-
-    @Test
-    void testDocumentPageContainsFail() {
+    void testSheetCountFail() {
         Throwable ex = assertThrows(AssertionError.class, () -> {
             DocAssertions.assertDoc(filedata)
-                .asWord()
-                .hasContent("Nope");
+                .asExcel()
+                .hasSheetCount(2);
+        });
+        Logger.getGlobal().info(ex.getMessage());
+    }
+
+    @Test
+    void testCellValue() {
+        DocAssertions.assertDoc(filedata)
+            .asExcel()
+            .hasCellValue(0, 0, 0, "Test");
+    }
+
+    @Test
+    void testCellValueFail() {
+        Throwable ex = assertThrows(AssertionError.class, () -> {
+            DocAssertions.assertDoc(filedata)
+                .asExcel()
+                .hasCellValue(0, 0, 0, "Nope");
         });
         Logger.getGlobal().info(ex.getMessage());
     }

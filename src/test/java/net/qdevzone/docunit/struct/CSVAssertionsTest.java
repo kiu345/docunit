@@ -1,6 +1,6 @@
-package net.qdevzone.docunit.excel;
+package net.qdevzone.docunit.struct;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -11,19 +11,19 @@ import org.junit.jupiter.api.Test;
 
 import net.qdevzone.docunit.DocAssertions;
 
-class ExcelAssertionsTest {
+class CSVAssertionsTest {
 
-    byte[] filedata;
+    private byte[] filedata;
 
     @BeforeEach
     void setUp() throws Exception {
-        filedata = Files.readAllBytes(Path.of("src", "test", "resources", "files", "test.xlsx"));
+        filedata = Files.readAllBytes(Path.of("src", "test", "resources", "files", "test.csv"));
     }
 
     @Test
     void testDocumentLoad() {
         DocAssertions.assertDoc(filedata)
-            .asExcel()
+            .asText()
             .isValid();
     }
 
@@ -31,10 +31,17 @@ class ExcelAssertionsTest {
     void testDocumentLoadFailNull() {
         Throwable ex = assertThrows(AssertionError.class, () -> {
             DocAssertions.assertDoc((byte[]) null)
-                .asExcel()
+                .asPdf()
                 .isValid();
         });
         Logger.getGlobal().info(ex.getMessage());
+    }
+
+    @Test
+    void testDocumentContainsText() {
+        DocAssertions.assertDoc(filedata)
+            .asText()
+            .contains("Hello");
     }
 
 }

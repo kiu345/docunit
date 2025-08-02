@@ -2,10 +2,14 @@ package net.qdevzone.docunit.doc;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.util.List;
 import java.util.logging.Logger;
 
 import org.apache.poi.xwpf.extractor.XWPFWordExtractor;
+import org.apache.poi.xwpf.usermodel.IBodyElement;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
+import org.apache.poi.xwpf.usermodel.XWPFParagraph;
+import org.apache.poi.xwpf.usermodel.XWPFTable;
 
 import net.qdevzone.docunit.AbstractDocAssert;
 import net.qdevzone.docunit.DocumentAssert;
@@ -90,5 +94,23 @@ public class WordAssertions extends AbstractDocAssert<WordAssertions> implements
             throw failure("page count not in range %d >[ %d ]> %d", min, actualPages, max);
         }
         return this;
+    }
+
+    public WordAssertions hasContent(String expected) {
+        List<IBodyElement> elements = document.getBodyElements();
+        for (var e : elements) {
+            if (e instanceof XWPFParagraph para) {
+                if (para.getText().contains(expected)) {
+                    return this;
+                }
+            }
+            if (e instanceof XWPFTable table) {
+                if (table.getText().contains(expected)) {
+                    return this;
+                }
+            }
+        }
+
+        throw failure("text not found: %s", expected);
     }
 }

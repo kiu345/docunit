@@ -1,4 +1,4 @@
-package net.qdevzone.docunit.xml;
+package net.qdevzone.docunit.struct;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
