@@ -1,5 +1,6 @@
 package net.qdevzone.docunit.struct;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.nio.file.Files;
@@ -8,6 +9,8 @@ import java.util.logging.Logger;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import com.jayway.jsonpath.PathNotFoundException;
 
 import net.qdevzone.docunit.DocAssertions;
 
@@ -57,6 +60,10 @@ class JSONAssertionsTest {
                 .isValid();
         });
         Logger.getGlobal().info(ex.getMessage());
+
+        DocAssertions.assertDoc((byte[]) null)
+            .asJson()
+            .isNotValid();
     }
 
     @Test
@@ -67,17 +74,39 @@ class JSONAssertionsTest {
     }
 
     @Test
-    void testDocumentContainsKey() {
+    void testDocumentHasKey() {
         DocAssertions.assertDoc(filedata)
             .asJson()
             .hasKey("$.countries[4].name");
     }
 
     @Test
-    void testDocumentContainsStringValue() {
+    void testDocumentHasKeyFail() {
+        Throwable ex = assertThrows(AssertionError.class, () -> {
+            DocAssertions.assertDoc(filedata)
+                .asJson()
+                .hasKey("$.countries[4].nope");
+        });
+        assertThat(ex.getCause()).isOfAnyClassIn(PathNotFoundException.class);
+
+        Logger.getGlobal().info(ex.getMessage());
+    }
+
+    @Test
+    void testDocumentHasStringValue() {
         DocAssertions.assertDoc(filedata)
             .asJson()
             .hasValue("$.countries[4].name", "Andorra");
+    }
+
+    @Test
+    void testDocumentHasStringValueFail() {
+        Throwable ex = assertThrows(AssertionError.class, () -> {
+            DocAssertions.assertDoc(filedata)
+                .asJson()
+                .hasValue("$.countries[4].name", "Nope");
+        });
+        Logger.getGlobal().info(ex.getMessage());
     }
 
     @Test

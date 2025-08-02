@@ -39,13 +39,17 @@ class PdfAssertionsTest {
     }
 
     @Test
-    void testDocumentLoadFailEmpty() {
+    void testDocumentLoadFailInvalid() {
         Throwable ex = assertThrows(AssertionError.class, () -> {
             DocAssertions.assertDoc((new byte[] { 0, 1, 2 }))
                 .asPdf()
                 .isValid();
         });
         Logger.getGlobal().info(ex.getMessage());
+
+        DocAssertions.assertDoc((new byte[] { 0, 1, 2 }))
+            .asPdf()
+            .isNotValid();
     }
 
     @Test
@@ -66,23 +70,37 @@ class PdfAssertionsTest {
         });
         Logger.getGlobal().info(ex.getMessage());
     }
+
     @Test
     void testDocumentPagesMinMaxOK() {
         DocAssertions.assertDoc(filedata)
             .asPdf()
             .hasPages()
-            .hasPageCount(1,3);
+            .hasPageCount(1, 3);
     }
 
     @Test
     void testDocumentPageText() {
         DocAssertions.assertDoc(filedata)
-        .asPdf()
-        .hasTextInPage(1, "Test document");
+            .asPdf()
+            .hasTextInPage(1, "Test document");
         DocAssertions.assertDoc(filedata)
-        .asPdf()
-        .hasTextInPage(1, "Test document", new Rectangle2D.Float(0, 0, 75, 200));
+            .asPdf()
+            .hasTextInPage(1, "Test document", new Rectangle2D.Float(0, 0, 75, 200));
     }
 
+    @Test
+    void testDocumentPageTextFail() {
+        assertThrows(AssertionError.class, () -> {
+            DocAssertions.assertDoc(filedata)
+                .asPdf()
+                .hasTextInPage(1, "Nope");
+        });
+        assertThrows(AssertionError.class, () -> {
+            DocAssertions.assertDoc(filedata)
+                .asPdf()
+                .hasTextInPage(1, "Test document", new Rectangle2D.Float(0, 0, 20, 200));
+        });
+    }
 
 }

@@ -9,6 +9,7 @@ import java.util.Map;
 
 import javax.imageio.ImageIO;
 
+import org.apache.tika.Tika;
 import org.apache.tika.exception.TikaException;
 import org.apache.tika.metadata.Metadata;
 import org.apache.tika.parser.AutoDetectParser;
@@ -20,11 +21,13 @@ import org.xml.sax.SAXException;
 import net.qdevzone.docunit.AbstractDocAssert;
 import net.qdevzone.docunit.DocumentAssert;
 import net.qdevzone.docunit.DocumentAssert.FileType;
+import net.qdevzone.docunit.MimeType;
 
 public class ImageAssertions extends AbstractDocAssert<ImageAssertions> {
     private static final FileType[] ALLOWED_TYPES = { FileType.PNG, FileType.JPG, FileType.GIF };
 
     private final DocumentAssert base;
+    @SuppressWarnings("unused")
     private FileType type;
 
     private BufferedImage image;
@@ -45,10 +48,17 @@ public class ImageAssertions extends AbstractDocAssert<ImageAssertions> {
             loadImage(base);
 
             loadMeta(base);
+
         }
         catch (IOException e) {
             loadError = e;
         }
+    }
+
+    private void loadImage(DocumentAssert base) throws IOException {
+        ByteArrayInputStream is = new ByteArrayInputStream(base.actual());
+        image = ImageIO.read(is);
+        is.close();
     }
 
     private void loadMeta(DocumentAssert base) throws IOException {
@@ -70,15 +80,14 @@ public class ImageAssertions extends AbstractDocAssert<ImageAssertions> {
 
         for (String name : metadataNames) {
             metaData.put(name, metadata.get(name));
-            System.out.println(name + ": " + metadata.get(name));
+//            System.out.println(name + ": " + metadata.get(name));
         }
         is.close();
     }
 
-    private void loadImage(DocumentAssert base) throws IOException {
-        ByteArrayInputStream is = new ByteArrayInputStream(base.actual());
-        image = ImageIO.read(is);
-        is.close();
+    public String mimeType() {
+        Tika tika = new Tika();
+        return tika.detect(base.actual());
     }
 
     @Override
@@ -101,21 +110,21 @@ public class ImageAssertions extends AbstractDocAssert<ImageAssertions> {
     }
 
     public ImageAssertions isPng() {
-        if (type != FileType.PNG) {
+        if (!MimeType.Image.PNG.equals(mimeType())) {
             throw failure("type is not PNG");
         }
         return this;
     }
 
     public ImageAssertions isJpeg() {
-        if (type != FileType.JPG) {
+        if (!MimeType.Image.JPEG.equals(mimeType())) {
             throw failure("type is not JPEG");
         }
         return this;
     }
 
     public ImageAssertions isGif() {
-        if (type != FileType.GIF) {
+        if (!MimeType.Image.GIF.equals(mimeType())) {
             throw failure("type is not GIF");
         }
         return this;
@@ -156,11 +165,11 @@ public class ImageAssertions extends AbstractDocAssert<ImageAssertions> {
             otherImage = ImageIO.read(new ByteArrayInputStream(otherImageData));
         }
         catch (IOException e) {
-            throw new AssertionError("could not load compare image: " + e.getMessage(), e);
+            throw failureWithCause(e, "could not load compare image: " + e.getMessage());
         }
 
         if (image.getWidth() != otherImage.getWidth() || image.getHeight() != otherImage.getHeight()) {
-            failWithMessage(
+            throw failure(
                 "image sizes do not match: %dx%d vs %dx%d",
                 image.getWidth(), image.getHeight(),
                 otherImage.getWidth(), otherImage.getHeight()
@@ -196,7 +205,7 @@ public class ImageAssertions extends AbstractDocAssert<ImageAssertions> {
         double averageDelta = totalDelta / totalPixels;
 
         if (averageDelta > maxDelta) {
-            failWithMessage(
+            throw failure(
                 "max delta (%.2f) beyond allowed (%.2f)",
                 averageDelta, maxDelta
             );

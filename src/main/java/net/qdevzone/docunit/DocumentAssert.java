@@ -2,6 +2,7 @@ package net.qdevzone.docunit;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -163,7 +164,19 @@ public class DocumentAssert extends AbstractDocAssert<DocumentAssert> {
     }
 
     public CSVAssertions asCsv() {
-        return new CSVAssertions(this);
+        return asCsv(",", true);
+    }
+
+    public CSVAssertions asCsv(String delimiter) {
+        return asCsv(delimiter, true);
+    }
+
+    public CSVAssertions asCsv(String delimiter, boolean hasHeaders) {
+        return new CSVAssertions(this, delimiter, hasHeaders);
+    }
+
+    public CSVAssertions asCsv(String delimiter, boolean hasHeaders, Charset charset) {
+        return new CSVAssertions(this, delimiter, hasHeaders, charset);
     }
 
     public JSONAssertions asJson() {

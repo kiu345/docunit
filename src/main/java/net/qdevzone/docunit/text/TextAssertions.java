@@ -11,7 +11,7 @@ public class TextAssertions extends AbstractDocAssert<TextAssertions> {
 
     public TextAssertions(DocumentAssert base) {
         super(TextAssertions.class);
-        this.document = new String(base.actual());
+        this.document = (base.actual() != null) ? new String(base.actual()) : null;
         this.base = base;
     }
 

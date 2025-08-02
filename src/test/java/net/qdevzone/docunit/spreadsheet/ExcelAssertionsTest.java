@@ -35,6 +35,10 @@ class ExcelAssertionsTest {
                 .isValid();
         });
         Logger.getGlobal().info(ex.getMessage());
+
+        DocAssertions.assertDoc((byte[]) null)
+            .asExcel()
+            .isNotValid();
     }
 
     @Test

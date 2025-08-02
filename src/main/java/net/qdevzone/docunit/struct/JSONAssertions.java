@@ -35,7 +35,7 @@ public class JSONAssertions extends AbstractDocAssert<JSONAssertions> {
             new ObjectMapper().readTree(base.actual());
         }
         catch (IOException e) {
-            failWithMessage("Input is not valid JSON: %s", e.getMessage());
+            throw failureWithCause(e, "Input is not valid JSON: %s", e.getMessage());
         }
         return this;
     }
@@ -57,14 +57,14 @@ public class JSONAssertions extends AbstractDocAssert<JSONAssertions> {
         try {
             Object value = JsonPath.read(createInputStream(), jsonPath);
             if (value == null) {
-                failWithMessage("JsonPath '%s' does not exist or is null", jsonPath);
+                throw failure("JsonPath '%s' does not exist or is null", jsonPath);
             }
         }
         catch (PathNotFoundException e) {
-            failWithMessage("JsonPath '%s' not found", jsonPath);
+            throw failureWithCause(e, "JsonPath '%s' not found", jsonPath);
         }
         catch (IOException e) {
-            failWithMessage(e.getMessage());
+            throw failureWithCause(e, e.getMessage());
         }
         return this;
     }
@@ -84,17 +84,17 @@ public class JSONAssertions extends AbstractDocAssert<JSONAssertions> {
                 expected = JsonPath.read(expectedJson, "$");
             }
             if (!Objects.equals(actual, expected)) {
-                failWithMessage(
+                throw failure(
                     "JsonPath '%s' expected <%s>, but was <%s>",
                     jsonPath, expected, actual
                 );
             }
         }
         catch (PathNotFoundException e) {
-            failWithMessage("JsonPath '%s' not found: %s", jsonPath, e.getMessage());
+            throw failure("JsonPath '%s' not found: %s", jsonPath, e.getMessage());
         }
         catch (IOException e) {
-            failWithMessage(e.getMessage());
+            throw failure(e.getMessage());
         }
         return this;
     }
@@ -103,20 +103,20 @@ public class JSONAssertions extends AbstractDocAssert<JSONAssertions> {
         try {
             List<?> array = JsonPath.read(createInputStream(), jsonPath);
             if (array.size() != expectedSize) {
-                failWithMessage(
+                throw failure(
                     "JsonPath '%s' has %d elements, expected: %d",
                     jsonPath, array.size(), expectedSize
                 );
             }
         }
         catch (ClassCastException e) {
-            failWithMessage("JsonPath '%s' is not an arary", jsonPath);
+            throw failure("JsonPath '%s' is not an arary", jsonPath);
         }
         catch (PathNotFoundException e) {
-            failWithMessage("JsonPath '%s' not found", jsonPath);
+            throw failureWithCause(e,"JsonPath '%s' not found", jsonPath);
         }
         catch (IOException e) {
-            failWithMessage(e.getMessage());
+            throw failureWithCause(e, e.getMessage());
         }
         return this;
     }

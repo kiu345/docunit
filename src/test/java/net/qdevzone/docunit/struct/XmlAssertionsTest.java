@@ -45,6 +45,17 @@ class XmlAssertionsTest {
                 .isValid();
         });
         Logger.getGlobal().info(ex.getMessage());
+
+        DocAssertions.assertDoc((new byte[] { 0, 1, 2 }))
+            .asXml()
+            .isNotValid();
+    }
+
+    @Test
+    void testDocumentContains() {
+        DocAssertions.assertDoc(filedata)
+            .asXml()
+            .contains("Algeria");
     }
 
     @Test
@@ -64,4 +75,30 @@ class XmlAssertionsTest {
         Logger.getGlobal().info(ex.getMessage());
     }
 
+    @Test
+    void testDocumentHasPath() {
+        DocAssertions.assertDoc(filedata)
+            .asXml()
+            .hasXPath("/data/countries/element[5]/name", "Andorra");
+    }
+
+    @Test
+    void testDocumentHasPathFailKey() {
+        Throwable ex = assertThrows(AssertionError.class, () -> {
+            DocAssertions.assertDoc(filedata)
+                .asXml()
+                .hasXPath("/data/countries/element[5]/nope", "Andorra");
+        });
+        Logger.getGlobal().info(ex.getMessage());
+    }
+
+    @Test
+    void testDocumentHasPathFailValue() {
+        Throwable ex = assertThrows(AssertionError.class, () -> {
+            DocAssertions.assertDoc(filedata)
+                .asXml()
+                .hasXPath("/data/countries/element[5]/name", "Nope");
+        });
+        Logger.getGlobal().info(ex.getMessage());
+    }
 }
