@@ -164,7 +164,7 @@ public class PdfAssertions extends AbstractDocAssert<PdfAssertions> implements P
 
         protected Rectangle2D calculateArea(List<TextPosition> textPositions) {
             float minX, minY, maxX, maxY;
-            TextPosition first = textPositions.getFirst();
+            TextPosition first = textPositions.isEmpty() ? null : textPositions.get(0);
             minX = first.getX();
             minY = first.getY();
             maxX = minX;
