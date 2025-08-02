@@ -41,7 +41,7 @@ class CSVAssertionsTest {
     void testDocumentContainsText() {
         DocAssertions.assertDoc(filedata)
             .asText()
-            .contains("Hello");
+            .contains("First Name");
     }
 
 }

@@ -41,7 +41,7 @@ class JSONAssertionsTest {
     void testDocumentContainsText() {
         DocAssertions.assertDoc(filedata)
             .asText()
-            .contains("Hello");
+            .contains("countries");
     }
 
 }

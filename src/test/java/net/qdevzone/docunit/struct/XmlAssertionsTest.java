@@ -51,7 +51,7 @@ class XmlAssertionsTest {
     void testDocumentRoot() {
         DocAssertions.assertDoc(filedata)
             .asXml()
-            .hasRootElement("testfile");
+            .hasRootElement("data");
     }
 
     @Test
@@ -59,7 +59,7 @@ class XmlAssertionsTest {
         Throwable ex = assertThrows(AssertionError.class, () -> {
             DocAssertions.assertDoc(filedata)
                 .asXml()
-                .hasRootElement("notatestfile");
+                .hasRootElement("nope");
         });
         Logger.getGlobal().info(ex.getMessage());
     }
