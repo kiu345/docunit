@@ -18,6 +18,8 @@ import net.qdevzone.docunit.doc.WordAssertions;
 import net.qdevzone.docunit.image.ImageAssertions;
 import net.qdevzone.docunit.pdf.PdfAssertions;
 import net.qdevzone.docunit.spreadsheet.ExcelAssertions;
+import net.qdevzone.docunit.struct.CSVAssertions;
+import net.qdevzone.docunit.struct.JSONAssertions;
 import net.qdevzone.docunit.struct.XmlAssertions;
 import net.qdevzone.docunit.text.TextAssertions;
 
@@ -158,6 +160,14 @@ public class DocumentAssert extends AbstractDocAssert<DocumentAssert> {
 
     public TextAssertions asText() {
         return new TextAssertions(this);
+    }
+
+    public CSVAssertions asCsv() {
+        return new CSVAssertions(this);
+    }
+
+    public JSONAssertions asJson() {
+        return new JSONAssertions(this);
     }
 
     public XmlAssertions asXml() {

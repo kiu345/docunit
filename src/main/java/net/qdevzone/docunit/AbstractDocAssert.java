@@ -1,5 +1,6 @@
 package net.qdevzone.docunit;
 
+import java.io.ByteArrayInputStream;
 import java.util.Arrays;
 
 import org.assertj.core.api.AbstractAssert;
@@ -20,6 +21,10 @@ public abstract class AbstractDocAssert<SELF extends Assert<SELF>> implements As
     protected AbstractDocAssert(Class<?> selfType) {
         myself = (SELF) selfType.cast(this);
         info = new WritableAssertionInfo(customRepresentation);
+    }
+
+    protected ByteArrayInputStream createInputStream() {
+        return new ByteArrayInputStream(actual());
     }
 
     @Override

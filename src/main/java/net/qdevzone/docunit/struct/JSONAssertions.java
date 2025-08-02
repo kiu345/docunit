@@ -2,6 +2,16 @@ package net.qdevzone.docunit.struct;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.io.IOException;
+import java.util.List;
+import java.util.Objects;
+
+import org.assertj.core.util.Lists;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jayway.jsonpath.JsonPath;
+import com.jayway.jsonpath.PathNotFoundException;
+
 import net.qdevzone.docunit.AbstractDocAssert;
 import net.qdevzone.docunit.DocumentAssert;
 
@@ -11,7 +21,7 @@ public class JSONAssertions extends AbstractDocAssert<JSONAssertions> {
 
     public JSONAssertions(DocumentAssert base) {
         super(JSONAssertions.class);
-        this.document = new String(base.actual());
+        this.document = (base.actual() != null) ? new String(base.actual()) : null;
         this.base = base;
     }
 
@@ -19,6 +29,13 @@ public class JSONAssertions extends AbstractDocAssert<JSONAssertions> {
     public JSONAssertions isValid() {
         if (document == null) {
             throw failure("document is null");
+        }
+        JsonPath.parse(createInputStream());
+        try {
+            new ObjectMapper().readTree(base.actual());
+        }
+        catch (IOException e) {
+            failWithMessage("Input is not valid JSON: %s", e.getMessage());
         }
         return this;
     }
@@ -33,6 +50,74 @@ public class JSONAssertions extends AbstractDocAssert<JSONAssertions> {
 
     public JSONAssertions contains(CharSequence... expected) {
         assertThat(document).contains(expected);
+        return this;
+    }
+
+    public JSONAssertions hasKey(String jsonPath) {
+        try {
+            Object value = JsonPath.read(createInputStream(), jsonPath);
+            if (value == null) {
+                failWithMessage("JsonPath '%s' does not exist or is null", jsonPath);
+            }
+        }
+        catch (PathNotFoundException e) {
+            failWithMessage("JsonPath '%s' not found", jsonPath);
+        }
+        catch (IOException e) {
+            failWithMessage(e.getMessage());
+        }
+        return this;
+    }
+
+    private static final Class<?>[] PLAIN_VALUE_CLASSES = { String.class, Integer.class, Long.class, Boolean.class };
+
+    private boolean isPlainValue(Class<?> type) {
+        return Lists.list(PLAIN_VALUE_CLASSES).contains(type);
+    }
+
+    public JSONAssertions hasValue(String jsonPath, Object expected) {
+        try {
+            Object actual = JsonPath.read(createInputStream(), jsonPath);
+            if (expected != null && !isPlainValue(expected.getClass())) {
+                // convert to json only data
+                String expectedJson = new ObjectMapper().writeValueAsString(expected);
+                expected = JsonPath.read(expectedJson, "$");
+            }
+            if (!Objects.equals(actual, expected)) {
+                failWithMessage(
+                    "JsonPath '%s' expected <%s>, but was <%s>",
+                    jsonPath, expected, actual
+                );
+            }
+        }
+        catch (PathNotFoundException e) {
+            failWithMessage("JsonPath '%s' not found: %s", jsonPath, e.getMessage());
+        }
+        catch (IOException e) {
+            failWithMessage(e.getMessage());
+        }
+        return this;
+    }
+
+    public JSONAssertions hasArraySize(String jsonPath, int expectedSize) {
+        try {
+            List<?> array = JsonPath.read(createInputStream(), jsonPath);
+            if (array.size() != expectedSize) {
+                failWithMessage(
+                    "JsonPath '%s' has %d elements, expected: %d",
+                    jsonPath, array.size(), expectedSize
+                );
+            }
+        }
+        catch (ClassCastException e) {
+            failWithMessage("JsonPath '%s' is not an arary", jsonPath);
+        }
+        catch (PathNotFoundException e) {
+            failWithMessage("JsonPath '%s' not found", jsonPath);
+        }
+        catch (IOException e) {
+            failWithMessage(e.getMessage());
+        }
         return this;
     }
 
