@@ -46,11 +46,11 @@ public class XmlAssertions extends AbstractDocAssert<XmlAssertions> {
             String result = expr.evaluate(document).trim();
 
             if (!expectedValue.equals(result)) {
-                failWithMessage("xpath '%s' expected <%s>, got <%s>.", expression, expectedValue, result);
+                throw failure("xpath '%s' expected <%s>, got <%s>.", expression, expectedValue, result);
             }
         }
         catch (Exception e) {
-            failWithMessage("error in xpath expression '%s': %s", expression, e.getMessage());
+            throw failure("error in xpath expression '%s': %s", expression, e.getMessage());
         }
         return this;
     }
@@ -58,7 +58,7 @@ public class XmlAssertions extends AbstractDocAssert<XmlAssertions> {
     public XmlAssertions hasRootElement(String expectedName) {
         String actual = document.getDocumentElement().getTagName();
         if (!expectedName.equals(actual)) {
-            failWithMessage("expected root element <%s> does not match <%s>.", expectedName, actual);
+            throw failure("expected root element <%s> does not match <%s>.", expectedName, actual);
         }
         return this;
     }

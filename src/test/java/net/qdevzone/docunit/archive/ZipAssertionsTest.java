@@ -13,7 +13,6 @@ import org.junit.jupiter.api.Test;
 import net.qdevzone.docunit.DocAssertions;
 import net.qdevzone.docunit.DocumentAssert.FileType;
 
-@Disabled("file not found in github atm")
 class ZipAssertionsTest {
 
     @Test

@@ -1,4 +1,8 @@
 {
+    "meta": {
+            "name": "CountryInfo",
+            "version": "1.0"
+    },
     "countries": [
         {
             "name": "Afghanistan",

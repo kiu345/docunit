@@ -24,7 +24,8 @@ class WordAssertionsTest {
     void testDocumentLoad() {
         DocAssertions.assertDoc(filedata)
             .asWord()
-            .isValid();
+            .isValid()
+            .hasPages();
     }
 
     @Test
@@ -35,6 +36,10 @@ class WordAssertionsTest {
                 .isValid();
         });
         Logger.getGlobal().info(ex.getMessage());
+
+        DocAssertions.assertDoc((byte[]) null)
+            .asWord()
+            .isNotValid();
     }
 
     @Test
@@ -42,6 +47,33 @@ class WordAssertionsTest {
         DocAssertions.assertDoc(filedata)
             .asWord()
             .hasPageCount(1);
+    }
+
+    @Test
+    void testDocumentPageCountFail() {
+        Throwable ex = assertThrows(AssertionError.class, () -> {
+            DocAssertions.assertDoc(filedata)
+                .asWord()
+                .hasPageCount(2);
+        });
+        Logger.getGlobal().info(ex.getMessage());
+    }
+
+    @Test
+    void testDocumentPageCountBetween() {
+        DocAssertions.assertDoc(filedata)
+            .asWord()
+            .hasPageCount(0, 10);
+    }
+
+    @Test
+    void testDocumentPageCountBetweenFail() {
+        Throwable ex = assertThrows(AssertionError.class, () -> {
+            DocAssertions.assertDoc(filedata)
+                .asWord()
+                .hasPageCount(5, 10);
+        });
+        Logger.getGlobal().info(ex.getMessage());
     }
 
     @Test

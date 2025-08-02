@@ -1,5 +1,6 @@
 package net.qdevzone.docunit;
 
+import java.io.ByteArrayInputStream;
 import java.util.Arrays;
 
 import org.assertj.core.api.AbstractAssert;
@@ -22,11 +23,15 @@ public abstract class AbstractDocAssert<SELF extends Assert<SELF>> implements As
         info = new WritableAssertionInfo(customRepresentation);
     }
 
+    protected ByteArrayInputStream createInputStream() {
+        return new ByteArrayInputStream(actual());
+    }
+
     @Override
     public SELF isEmpty() {
         byte[] data = actual();
         if (!(data == null || data.length == 0)) {
-            failure("document not empty");
+            throw failure("document not empty");
         }
         return myself;
     }
@@ -35,7 +40,7 @@ public abstract class AbstractDocAssert<SELF extends Assert<SELF>> implements As
     public SELF isNotEmpty() {
         byte[] data = actual();
         if (data == null || data.length == 0) {
-            failure("document not empty");
+            throw failure("document not empty");
         }
         return myself;
     }
@@ -45,14 +50,14 @@ public abstract class AbstractDocAssert<SELF extends Assert<SELF>> implements As
         byte[] data = actual();
         if (expected == null) {
             if (data != null) {
-                failure("not equal");
+                throw failure("not equal");
             }
             else {
                 return myself;
             }
         }
         if (!expected.equals(data)) {
-            failure("not equal");
+            throw failure("not equal");
         }
         return myself;
     }
@@ -62,12 +67,12 @@ public abstract class AbstractDocAssert<SELF extends Assert<SELF>> implements As
         byte[] data = actual();
         if (other == null) {
             if (data == null) {
-                failure("equal");
+                throw failure("equal");
             }
             return myself;
         }
         if (other.equals(data)) {
-            failure("equal");
+            throw failure("equal");
         }
         return myself;
     }
@@ -75,8 +80,8 @@ public abstract class AbstractDocAssert<SELF extends Assert<SELF>> implements As
     @Override
     public SELF isSize(long expected) {
         byte[] data = actual();
-        if (!(data != null && data.length == expected)) {
-            failure("size not %d and %d", expected);
+        if (data == null || data.length != expected) {
+            throw failure("size not %d", expected);
         }
         return myself;
     }
@@ -85,29 +90,38 @@ public abstract class AbstractDocAssert<SELF extends Assert<SELF>> implements As
     public SELF isSizeBetween(long min, long max) {
         byte[] data = actual();
         if (!(data != null && data.length >= min && data.length <= max)) {
-            failure("size not between %d and %d", min, max);
+            throw failure("size not between %d and %d", min, max);
         }
         return myself;
     }
 
     @Override
     public SELF isIn(byte[]... values) {
-        return myself;
+        byte[] data = actual();
+        for (byte[] expected : values) {
+            if (expected == data) {
+                return myself;
+            }
+        }
+        throw failure("not in values");
     }
 
     @Override
     public SELF isNotIn(byte[]... values) {
+        byte[] data = actual();
+        for (byte[] expected : values) {
+            if (expected == data) {
+                throw failure("in values");
+            }
+        }
         return myself;
     }
 
-    /**
-     * Throw an assertion error based on information in this assertion.
-     */
-    protected void failWithMessage(String errorMessage, Object... arguments) {
-        throw failure(errorMessage, arguments);
+    protected AssertionError failure(String errorMessage, Object... arguments) {
+        return failureWithCause(null, errorMessage, arguments);
     }
 
-    protected AssertionError failure(String errorMessage, Object... arguments) {
+    protected AssertionError failureWithCause(Throwable cause, String errorMessage, Object... arguments) {
         AssertionError assertionError = Failures.instance().failureIfErrorMessageIsOverridden(info);
         if (assertionError == null) {
             // error message was not overridden, build it.
@@ -116,6 +130,9 @@ public abstract class AbstractDocAssert<SELF extends Assert<SELF>> implements As
         }
         Failures.instance().removeAssertJRelatedElementsFromStackTraceIfNeeded(assertionError);
         removeCustomAssertRelatedElementsFromStackTraceIfNeeded(assertionError);
+        if (cause != null) {
+            assertionError.initCause(cause);
+        }
         return assertionError;
     }
 

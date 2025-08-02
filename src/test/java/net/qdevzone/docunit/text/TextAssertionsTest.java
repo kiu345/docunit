@@ -31,10 +31,14 @@ class TextAssertionsTest {
     void testDocumentLoadFailNull() {
         Throwable ex = assertThrows(AssertionError.class, () -> {
             DocAssertions.assertDoc((byte[]) null)
-                .asPdf()
+                .asText()
                 .isValid();
         });
         Logger.getGlobal().info(ex.getMessage());
+
+        DocAssertions.assertDoc((byte[]) null)
+            .asText()
+            .isNotValid();
     }
 
     @Test

@@ -2,6 +2,7 @@ package net.qdevzone.docunit;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -18,6 +19,8 @@ import net.qdevzone.docunit.doc.WordAssertions;
 import net.qdevzone.docunit.image.ImageAssertions;
 import net.qdevzone.docunit.pdf.PdfAssertions;
 import net.qdevzone.docunit.spreadsheet.ExcelAssertions;
+import net.qdevzone.docunit.struct.CSVAssertions;
+import net.qdevzone.docunit.struct.JSONAssertions;
 import net.qdevzone.docunit.struct.XmlAssertions;
 import net.qdevzone.docunit.text.TextAssertions;
 
@@ -158,6 +161,26 @@ public class DocumentAssert extends AbstractDocAssert<DocumentAssert> {
 
     public TextAssertions asText() {
         return new TextAssertions(this);
+    }
+
+    public CSVAssertions asCsv() {
+        return asCsv(",", true);
+    }
+
+    public CSVAssertions asCsv(String delimiter) {
+        return asCsv(delimiter, true);
+    }
+
+    public CSVAssertions asCsv(String delimiter, boolean hasHeaders) {
+        return new CSVAssertions(this, delimiter, hasHeaders);
+    }
+
+    public CSVAssertions asCsv(String delimiter, boolean hasHeaders, Charset charset) {
+        return new CSVAssertions(this, delimiter, hasHeaders, charset);
+    }
+
+    public JSONAssertions asJson() {
+        return new JSONAssertions(this);
     }
 
     public XmlAssertions asXml() {
