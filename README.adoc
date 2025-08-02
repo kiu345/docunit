@@ -4,27 +4,40 @@
 :source-highlighter: highlightjs
 :sectnums:
 
-A fluent assertion library for testing document content in JUnit, designed for structured formats like PDF, XML, Word and Excel.
+A fluent assertion library for testing document content in JUnit test cases, designed for structured formats like PDF, XML, Word and Excel.
 
-Right now is's more or less a quick hack, for basic usage see check the JUnit test files.
+Right now is's more or less a quick hack, for basic usage see the JUnit test files.
 
 == Features
 
-* Fluent assertions on `byte[]`-based document content
+* Fluent assertions on binary document content (byte arrays, input streams)
 * Supported formats:
 ** Text
+*** CSV
+*** JSON
+*** XML
 ** Word (DOCX)
 ** Excel (XLSX)
 ** PDF
-** XML
+** Images
+*** PNG
+*** JPEG
+*** GIF
+** ZIP
 
 == Example Usage
 
 ```java
 assertDoc(pdfBytes)
     .asPDF()
-    .hasText("Rechnung")
+    .hasText("Bill")
     .hasPageCount(1);
+
+assertDoc(imageBytes)
+    .asJpeg()
+    .hasImageSize(100, 100);
+    .hasCaption("Testimage")
+    .hasAverageRgbDeltaLessThan(image2Bytes, 3.0);
 
 assertDoc(xmlBytes)
     .asXml()
@@ -33,7 +46,7 @@ assertDoc(xmlBytes)
 
 assertDoc(jsonBytes)
     .asJSON()
-    .hasJsonPath("$.user.id", "42");
+    .hasValue("$.user.id", "42");
 ```
 
 WARNING: alpha/wip/poc code
@@ -41,4 +54,4 @@ WARNING: alpha/wip/poc code
 == Planned
 
 * more checks
-* image formats
+* more formats
