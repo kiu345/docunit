@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import net.qdevzone.docunit.DocAssertions;
 import net.qdevzone.docunit.DocumentAssert.FileType;
 
+@Disabled("file not found in github atm")
 class ZipAssertionsTest {
 
     @Test
@@ -67,7 +68,6 @@ class ZipAssertionsTest {
     }
 
     @Test
-    @Disabled("file not found in github atm")
     void testFindEntityWithSize() throws IOException {
         byte[] filedata = Files.readAllBytes(Path.of("src", "test", "resources", "files", "test.zip"));
         DocAssertions.assertDoc(filedata)
@@ -78,7 +78,6 @@ class ZipAssertionsTest {
     }
 
     @Test
-    @Disabled("file not found in github atm")
     void testFindEntityWithSizeFailed() throws IOException {
         byte[] filedata = Files.readAllBytes(Path.of("src", "test", "resources", "files", "test.zip"));
         Throwable ex = assertThrows(AssertionError.class, () -> {
