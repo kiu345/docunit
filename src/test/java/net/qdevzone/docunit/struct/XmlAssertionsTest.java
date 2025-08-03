@@ -34,7 +34,7 @@ class XmlAssertionsTest {
                 .asXml()
                 .isValid();
         });
-        Logger.getGlobal().info(ex.getMessage());
+        Logger.getGlobal().fine(ex.getMessage());
     }
 
     @Test
@@ -44,7 +44,7 @@ class XmlAssertionsTest {
                 .asXml()
                 .isValid();
         });
-        Logger.getGlobal().info(ex.getMessage());
+        Logger.getGlobal().fine(ex.getMessage());
 
         DocAssertions.assertDoc((new byte[] { 0, 1, 2 }))
             .asXml()
@@ -72,7 +72,7 @@ class XmlAssertionsTest {
                 .asXml()
                 .hasRootElement("nope");
         });
-        Logger.getGlobal().info(ex.getMessage());
+        Logger.getGlobal().fine(ex.getMessage());
     }
 
     @Test
@@ -89,7 +89,7 @@ class XmlAssertionsTest {
                 .asXml()
                 .hasXPath("/data/countries/element[5]/nope", "Andorra");
         });
-        Logger.getGlobal().info(ex.getMessage());
+        Logger.getGlobal().fine(ex.getMessage());
     }
 
     @Test
@@ -99,6 +99,6 @@ class XmlAssertionsTest {
                 .asXml()
                 .hasXPath("/data/countries/element[5]/name", "Nope");
         });
-        Logger.getGlobal().info(ex.getMessage());
+        Logger.getGlobal().fine(ex.getMessage());
     }
 }

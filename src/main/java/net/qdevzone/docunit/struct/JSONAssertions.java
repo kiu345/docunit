@@ -113,7 +113,7 @@ public class JSONAssertions extends AbstractDocAssert<JSONAssertions> {
             throw failure("JsonPath '%s' is not an arary", jsonPath);
         }
         catch (PathNotFoundException e) {
-            throw failureWithCause(e,"JsonPath '%s' not found", jsonPath);
+            throw failureWithCause(e, "JsonPath '%s' not found", jsonPath);
         }
         catch (IOException e) {
             throw failureWithCause(e, e.getMessage());

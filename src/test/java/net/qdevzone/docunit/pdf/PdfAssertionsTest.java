@@ -35,7 +35,7 @@ class PdfAssertionsTest {
                 .asPdf()
                 .isValid();
         });
-        Logger.getGlobal().info(ex.getMessage());
+        Logger.getGlobal().fine(ex.getMessage());
     }
 
     @Test
@@ -45,7 +45,7 @@ class PdfAssertionsTest {
                 .asPdf()
                 .isValid();
         });
-        Logger.getGlobal().info(ex.getMessage());
+        Logger.getGlobal().fine(ex.getMessage());
 
         DocAssertions.assertDoc((new byte[] { 0, 1, 2 }))
             .asPdf()
@@ -68,7 +68,7 @@ class PdfAssertionsTest {
                 .hasPages()
                 .hasPageCount(2);
         });
-        Logger.getGlobal().info(ex.getMessage());
+        Logger.getGlobal().fine(ex.getMessage());
     }
 
     @Test

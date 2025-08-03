@@ -7,43 +7,61 @@
     <version>0.0.1-SNAPSHOT</version>
     <name>Document unit tests</name>
     <url>http://docunit.qdevzone.net</url>
+    <scm>
+        <connection>scm:git:https://github.com/kiu345/docunit.git</connection>
+        <developerConnection>scm:git:https://github.com/kiu345/docunit.git</developerConnection>
+        <url>https://github.com/kiu345/docunit/tree/main</url>
+    </scm>
 
     <properties>
+        <argLine></argLine>
         <java.version>17</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <junit.version>5.13.4</junit.version>
+        <assertj.version>3.27.3</assertj.version>
+        <xmlunit.version>2.10.3</xmlunit.version>
+
+        <commons.csv.version>1.14.1</commons.csv.version>
+        <jsonpath.version>2.9.0</jsonpath.version>
         <poi.version>5.4.1</poi.version>
+        <pdfbox.version>3.0.5</pdfbox.version>
         <tika.version>3.2.1</tika.version>
         <twelvemonkeys.imageio.version>3.12.0</twelvemonkeys.imageio.version>
+        <slf4j.version>2.0.17</slf4j.version>
+
+        <sonar.version>5.1.0.4751</sonar.version>
+        <sonar.projectKey>docunit</sonar.projectKey>
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
-            <version>5.13.3</version>
+            <version>${junit.version}</version>
         </dependency>
         <dependency>
             <groupId>org.assertj</groupId>
             <artifactId>assertj-core</artifactId>
-            <version>3.27.3</version>
+            <version>${assertj.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.pdfbox</groupId>
             <artifactId>pdfbox</artifactId>
-            <version>3.0.5</version>
+            <version>${pdfbox.version}</version>
             <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>org.xmlunit</groupId>
             <artifactId>xmlunit-core</artifactId>
-            <version>2.10.3</version>
+            <version>${xmlunit.version}</version>
             <scope>compile</scope>
             <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>com.jayway.jsonpath</groupId>
             <artifactId>json-path</artifactId>
-            <version>2.9.0</version>
+            <version>${jsonpath.version}</version>
             <scope>compile</scope>
             <optional>true</optional>
         </dependency>
@@ -64,7 +82,7 @@
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-csv</artifactId>
-            <version>1.14.1</version>
+            <version>${commons.csv.version}</version>
             <scope>compile</scope>
             <optional>true</optional>
         </dependency>
@@ -105,10 +123,17 @@
             <scope>compile</scope>
             <optional>true</optional>
         </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>${slf4j.version}</version>
+            <scope>runtime</scope>
+        </dependency>
     </dependencies>
 
     <build>
         <plugins>
+            <!-- Compiler -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -119,6 +144,229 @@
                     <encoding>${project.build.sourceEncoding}</encoding>
                 </configuration>
             </plugin>
+
+            <!-- Version Enforcer -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <version>3.6.1</version>
+                <executions>
+                    <execution>
+                        <id>enforce</id>
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <requireMavenVersion>
+                                    <version>[3.8,)</version>
+                                </requireMavenVersion>
+                                <requireJavaVersion>
+                                    <version>[17,)</version>
+                                </requireJavaVersion>
+                            </rules>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- Version Management -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>versions-maven-plugin</artifactId>
+                <version>2.18.0</version>
+                <configuration>
+                    <generateBackupPoms>true</generateBackupPoms>
+                    <processDependencyManagement>false</processDependencyManagement>
+                    <ruleSet>
+                        <ignoreVersions>
+                            <ignoreVersion>
+                                <!-- can be either: 'exact' (default), 'regex' or 'range' -->
+                                <type>regex</type>
+                                <version>(?i).+([-_.](snapshot|m\d+|rc\d*|alpha\d*|beta\d*|dev\d*|preview|eap|canary|nightly)[-_.0-9]*)</version>
+                            </ignoreVersion>
+                        </ignoreVersions>
+                    </ruleSet>
+                    <excludeProperties>
+                        argLine,
+                        java.version,
+                        project.build.sourceEncoding,
+                        sonar.version,
+                        sonar.projectKey
+                    </excludeProperties>
+                    <properties>
+                        <property>
+                            <name>poi.version</name>
+                            <dependencies>
+                                <dependency>
+                                    <groupId>org.apache.poi</groupId>
+                                    <artifactId>poi</artifactId>
+                                </dependency>
+                            </dependencies>
+                        </property>
+                        <property>
+                            <name>tika.version</name>
+                            <dependencies>
+                                <dependency>
+                                    <groupId>org.apache.tika</groupId>
+                                    <artifactId>tika-core</artifactId>
+                                </dependency>
+                            </dependencies>
+                        </property>
+                        <property>
+                            <name>twelvemonkeys.imageio.version</name>
+                            <dependencies>
+                                <dependency>
+                                    <groupId>com.twelvemonkeys.imageio</groupId>
+                                    <artifactId>imageio-webp</artifactId>
+                                </dependency>
+                            </dependencies>
+                        </property>
+                    </properties>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>display-dependency-updates</goal>
+                            <goal>display-plugin-updates</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- Build-Helper (für Release-Flow) -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>3.6.1</version>
+                <executions>
+                    <execution>
+                        <id>parse-version</id>
+                        <goals>
+                            <goal>parse-version</goal>
+                        </goals>
+                        <phase>validate</phase>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- Spotless Code-Formatter -->
+            <plugin>
+                <groupId>com.diffplug.spotless</groupId>
+                <artifactId>spotless-maven-plugin</artifactId>
+                <version>2.46.1</version>
+                <configuration>
+                    <java>
+                        <eclipse>
+                            <version>4.36</version>
+                            <file>${project.basedir}/doc/codestyle/codestyle.xml</file>
+                        </eclipse>
+                    </java>
+                    <m2eEnableForIncrementalBuild>true</m2eEnableForIncrementalBuild>
+                </configuration>
+            </plugin>
+
+            <!-- JaCoCo (Code Coverage) -->
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.13</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>report</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- CycloneDX (SBOM) -->
+            <plugin>
+                <groupId>org.cyclonedx</groupId>
+                <artifactId>cyclonedx-maven-plugin</artifactId>
+                <version>2.9.1</version>
+                <configuration>
+                    <outputFormat>xml</outputFormat>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>makeBom</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>ci</id>
+            <build>
+                <plugins>
+                    <!-- Sonar -->
+                    <plugin>
+                        <groupId>org.sonarsource.scanner.maven</groupId>
+                        <artifactId>sonar-maven-plugin</artifactId>
+                        <version>${sonar.version}</version>
+                    </plugin>
+
+                    <!-- Failsafe IT tests -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-failsafe-plugin</artifactId>
+                        <version>3.5.3</version>
+                        <executions>
+                            <execution>
+                                <id>integration-tests</id>
+                                <goals>
+                                    <goal>integration-test</goal>
+                                    <goal>verify</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                    <!-- OWASP Dependency Check -->
+                    <plugin>
+                        <groupId>org.owasp</groupId>
+                        <artifactId>dependency-check-maven</artifactId>
+                        <version>12.1.3</version>
+                        <configuration>
+                            <nvdDatafeedUrl>${nvd.proxy.url}</nvdDatafeedUrl>
+                            <failOnError>false</failOnError>
+                            <formats>
+                                <format>html</format>
+                                <!-- <format>json</format> -->
+                                <format>xml</format>
+                            </formats>
+                            <skipProvidedScope>true</skipProvidedScope>
+                            <skipTestScope>true</skipTestScope>
+                            <suppressionFiles>
+                                <suppressionFile>${project.basedir}/suppressions.xml</suppressionFile>
+                            </suppressionFiles>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>check</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>

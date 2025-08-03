@@ -24,7 +24,7 @@ public class ZipAssertions extends AbstractDocAssert<ZipAssertions> {
         try {
             loadEntities();
         }
-        catch (IOException|NullPointerException e) {
+        catch (IOException | NullPointerException e) {
             loadError = e;
         }
     }

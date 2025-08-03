@@ -35,7 +35,7 @@ class WordAssertionsTest {
                 .asWord()
                 .isValid();
         });
-        Logger.getGlobal().info(ex.getMessage());
+        Logger.getGlobal().fine(ex.getMessage());
 
         DocAssertions.assertDoc((byte[]) null)
             .asWord()
@@ -56,7 +56,7 @@ class WordAssertionsTest {
                 .asWord()
                 .hasPageCount(2);
         });
-        Logger.getGlobal().info(ex.getMessage());
+        Logger.getGlobal().fine(ex.getMessage());
     }
 
     @Test
@@ -73,7 +73,7 @@ class WordAssertionsTest {
                 .asWord()
                 .hasPageCount(5, 10);
         });
-        Logger.getGlobal().info(ex.getMessage());
+        Logger.getGlobal().fine(ex.getMessage());
     }
 
     @Test
@@ -90,7 +90,7 @@ class WordAssertionsTest {
                 .asWord()
                 .hasContent("Nope");
         });
-        Logger.getGlobal().info(ex.getMessage());
+        Logger.getGlobal().fine(ex.getMessage());
     }
 
 }

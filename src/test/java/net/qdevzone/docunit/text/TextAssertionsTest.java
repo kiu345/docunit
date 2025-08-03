@@ -34,7 +34,7 @@ class TextAssertionsTest {
                 .asText()
                 .isValid();
         });
-        Logger.getGlobal().info(ex.getMessage());
+        Logger.getGlobal().fine(ex.getMessage());
 
         DocAssertions.assertDoc((byte[]) null)
             .asText()

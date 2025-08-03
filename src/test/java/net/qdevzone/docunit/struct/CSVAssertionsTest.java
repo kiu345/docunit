@@ -34,7 +34,7 @@ class CSVAssertionsTest {
                 .asCsv(",")
                 .isValid();
         });
-        Logger.getGlobal().info(ex.getMessage());
+        Logger.getGlobal().fine(ex.getMessage());
 
         DocAssertions.assertDoc((byte[]) null)
             .asCsv(",")
@@ -62,7 +62,7 @@ class CSVAssertionsTest {
                 .asCsv(",")
                 .hasHeader("No Name");
         });
-        Logger.getGlobal().info(ex.getMessage());
+        Logger.getGlobal().fine(ex.getMessage());
     }
 
     @Test
@@ -94,7 +94,7 @@ class CSVAssertionsTest {
                 .row(1)
                 .hasValue("First Name", "John");
         });
-        Logger.getGlobal().info(ex.getMessage());
+        Logger.getGlobal().fine(ex.getMessage());
     }
 
     @Test
@@ -105,7 +105,7 @@ class CSVAssertionsTest {
                 .row(1)
                 .hasValue("Nope", "John");
         });
-        Logger.getGlobal().info(ex.getMessage());
+        Logger.getGlobal().fine(ex.getMessage());
     }
 
     @Test
@@ -117,7 +117,7 @@ class CSVAssertionsTest {
                 .hasValueAt(1, "Mara")
                 .hasValueAt(2, "Hashimoto");
         });
-        Logger.getGlobal().info(ex.getMessage());
+        Logger.getGlobal().fine(ex.getMessage());
     }
 
     @Test
@@ -141,7 +141,7 @@ class CSVAssertionsTest {
                 .asCsv()
                 .hasRowCount(100);
         });
-        Logger.getGlobal().info(ex.getMessage());
+        Logger.getGlobal().fine(ex.getMessage());
     }
 
 }

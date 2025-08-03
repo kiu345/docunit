@@ -427,8 +427,8 @@ public class PdfAssertions extends AbstractDocAssert<PdfAssertions> implements P
         }
         for (var element : pdfEngine.foundElements) {
             if (element.text.contains(search)) {
-                if (Logger.getGlobal().isLoggable(Level.INFO)) {
-                    Logger.getGlobal().info("found text at " + element.location);
+                if (Logger.getGlobal().isLoggable(Level.FINER)) {
+                    Logger.getGlobal().finer("found text at " + element.location);
                 }
                 if (fullyCovertArea) {
                     if (area.contains(element.location)) {

@@ -31,7 +31,7 @@ class ZipAssertionsTest {
                 .asZip()
                 .isValid();
         });
-        Logger.getGlobal().info(ex.getMessage());
+        Logger.getGlobal().fine(ex.getMessage());
     }
 
     @Test
@@ -41,7 +41,7 @@ class ZipAssertionsTest {
                 .asZip()
                 .isValid();
         });
-        Logger.getGlobal().info(ex.getMessage());
+        Logger.getGlobal().fine(ex.getMessage());
     }
 
     @Test
@@ -63,7 +63,7 @@ class ZipAssertionsTest {
                 .asZip()
                 .containsElement("test2.csv");
         });
-        Logger.getGlobal().info(ex.getMessage());
+        Logger.getGlobal().fine(ex.getMessage());
     }
 
     @Test
@@ -86,7 +86,7 @@ class ZipAssertionsTest {
                 .isValid()
                 .containsElement("test.csv", 1000);
         });
-        Logger.getGlobal().info(ex.getMessage());
+        Logger.getGlobal().fine(ex.getMessage());
     }
 
 }

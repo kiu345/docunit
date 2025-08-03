@@ -6,7 +6,6 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.logging.Logger;
 
 import org.apache.tika.config.TikaConfig;
 import org.apache.tika.exception.TikaException;
@@ -76,10 +75,8 @@ public class DocumentAssert extends AbstractDocAssert<DocumentAssert> {
             is.close();
 
             String mimeTypeString = mimetype.toString();
-
-            Logger.getGlobal().info(mimeTypeString);
-
             boolean found = false;
+
             for (FileType type : types) {
                 List<String> checkType = new ArrayList<>();
                 switch (type) {

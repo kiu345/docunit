@@ -40,7 +40,7 @@ class ImageAssertionsTest {
                 .asJpeg()
                 .isJpeg();
         });
-        Logger.getGlobal().info(ex.getMessage());
+        Logger.getGlobal().fine(ex.getMessage());
 
         assertThat(ex.getMessage()).contains("type is not");
     }
@@ -53,7 +53,7 @@ class ImageAssertionsTest {
                 .asJpeg()
                 .hasImageSize(100, 100);
         });
-        Logger.getGlobal().info(ex.getMessage());
+        Logger.getGlobal().fine(ex.getMessage());
     }
 
     @Test
@@ -85,7 +85,7 @@ class ImageAssertionsTest {
                 .asJpeg()
                 .hasAverageRgbDeltaLessThan(referencedata, 1.0);
         });
-        Logger.getGlobal().info(ex.getMessage());
+        Logger.getGlobal().fine(ex.getMessage());
 
         assertThat(ex.getMessage()).contains("max delta");
     }
@@ -100,7 +100,7 @@ class ImageAssertionsTest {
                 .asJpeg()
                 .hasAverageRgbDeltaLessThan(referencedata, 255.0);
         });
-        Logger.getGlobal().info(ex.getMessage());
+        Logger.getGlobal().fine(ex.getMessage());
         assertThat(ex.getMessage()).contains("image sizes do not match");
     }
 
@@ -122,7 +122,7 @@ class ImageAssertionsTest {
                 .asGif()
                 .isGif();
         });
-        Logger.getGlobal().info(ex.getMessage());
+        Logger.getGlobal().fine(ex.getMessage());
 
         assertThat(ex.getMessage()).contains("type is not");
     }
@@ -135,7 +135,7 @@ class ImageAssertionsTest {
                 .asGif()
                 .hasImageSize(100, 100);
         });
-        Logger.getGlobal().info(ex.getMessage());
+        Logger.getGlobal().fine(ex.getMessage());
     }
 
     @Test
@@ -156,7 +156,7 @@ class ImageAssertionsTest {
                 .asPng()
                 .isPng();
         });
-        Logger.getGlobal().info(ex.getMessage());
+        Logger.getGlobal().fine(ex.getMessage());
 
         assertThat(ex.getMessage()).contains("type is not");
     }
@@ -169,7 +169,7 @@ class ImageAssertionsTest {
                 .asPng()
                 .hasImageSize(100, 100);
         });
-        Logger.getGlobal().info(ex.getMessage());
+        Logger.getGlobal().fine(ex.getMessage());
     }
 
 }

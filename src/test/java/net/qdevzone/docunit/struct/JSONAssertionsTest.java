@@ -59,7 +59,7 @@ class JSONAssertionsTest {
                 .asJson()
                 .isValid();
         });
-        Logger.getGlobal().info(ex.getMessage());
+        Logger.getGlobal().fine(ex.getMessage());
 
         DocAssertions.assertDoc((byte[]) null)
             .asJson()
@@ -89,7 +89,7 @@ class JSONAssertionsTest {
         });
         assertThat(ex.getCause()).isOfAnyClassIn(PathNotFoundException.class);
 
-        Logger.getGlobal().info(ex.getMessage());
+        Logger.getGlobal().fine(ex.getMessage());
     }
 
     @Test
@@ -106,7 +106,7 @@ class JSONAssertionsTest {
                 .asJson()
                 .hasValue("$.countries[4].name", "Nope");
         });
-        Logger.getGlobal().info(ex.getMessage());
+        Logger.getGlobal().fine(ex.getMessage());
     }
 
     @Test

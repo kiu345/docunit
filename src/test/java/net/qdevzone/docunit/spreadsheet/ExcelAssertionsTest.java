@@ -34,7 +34,7 @@ class ExcelAssertionsTest {
                 .asExcel()
                 .isValid();
         });
-        Logger.getGlobal().info(ex.getMessage());
+        Logger.getGlobal().fine(ex.getMessage());
 
         DocAssertions.assertDoc((byte[]) null)
             .asExcel()
@@ -55,7 +55,7 @@ class ExcelAssertionsTest {
                 .asExcel()
                 .hasSheetCount(2);
         });
-        Logger.getGlobal().info(ex.getMessage());
+        Logger.getGlobal().fine(ex.getMessage());
     }
 
     @Test
@@ -72,7 +72,7 @@ class ExcelAssertionsTest {
                 .asExcel()
                 .hasCellValue(0, 0, 0, "Nope");
         });
-        Logger.getGlobal().info(ex.getMessage());
+        Logger.getGlobal().fine(ex.getMessage());
     }
 
 }
