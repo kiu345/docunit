@@ -61,6 +61,8 @@ import org.apache.pdfbox.cos.COSDictionary;
 import org.apache.pdfbox.cos.COSName;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.common.PDMetadata;
+import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDType3CharProc;
 import org.apache.pdfbox.pdmodel.graphics.form.PDTransparencyGroup;
 import org.apache.pdfbox.pdmodel.interactive.annotation.PDAnnotation;
@@ -68,6 +70,10 @@ import org.apache.pdfbox.pdmodel.interactive.annotation.PDAppearanceStream;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.apache.pdfbox.text.TextPosition;
 import org.apache.pdfbox.util.Matrix;
+
+import com.adobe.internal.xmp.XMPException;
+import com.adobe.internal.xmp.XMPMeta;
+import com.adobe.internal.xmp.XMPMetaFactory;
 
 import net.qdevzone.docunit.AbstractDocAssert;
 import net.qdevzone.docunit.DocumentAssert;
@@ -163,8 +169,11 @@ public class PdfAssertions extends AbstractDocAssert<PdfAssertions> implements P
 //        }
 
         protected Rectangle2D calculateArea(List<TextPosition> textPositions) {
+            if (textPositions == null || textPositions.isEmpty()) {
+                return new Rectangle2D.Float(-1, -1, 0, 0);
+            }
             float minX, minY, maxX, maxY;
-            TextPosition first = textPositions.isEmpty() ? null : textPositions.get(0);
+            TextPosition first = textPositions.get(0);
             minX = first.getX();
             minY = first.getY();
             maxX = minX;
@@ -332,6 +341,18 @@ public class PdfAssertions extends AbstractDocAssert<PdfAssertions> implements P
     private final DocumentAssert base;
     private Throwable loadError;
 
+    private void checkDocumentOK() {
+        if (document == null) {
+            throw new IllegalStateException("document is null");
+        }
+    }
+
+    private void checkValidPage(int pageNum) {
+        if (pageNum < 1 || pageNum > document.getNumberOfPages()) {
+            throw new IllegalStateException("page number %d out of range (1 ... %d)".formatted(pageNum, document.getNumberOfPages()));
+        }
+    }
+
     public PdfAssertions(DocumentAssert base) {
         super(PdfAssertions.class);
         PDDocument loadadDoc = null;
@@ -371,6 +392,7 @@ public class PdfAssertions extends AbstractDocAssert<PdfAssertions> implements P
     }
 
     public PdfAssertions hasPages() {
+        checkDocumentOK();
         if (document.getNumberOfPages() == 0) {
             throw failure("no pages found");
         }
@@ -378,6 +400,7 @@ public class PdfAssertions extends AbstractDocAssert<PdfAssertions> implements P
     }
 
     public PdfAssertions hasPageCount(int count) {
+        checkDocumentOK();
         int actualPages = document.getNumberOfPages();
         if (actualPages != count) {
             throw failure("page count %d differs from expected %d", actualPages, count);
@@ -386,6 +409,7 @@ public class PdfAssertions extends AbstractDocAssert<PdfAssertions> implements P
     }
 
     public PdfAssertions hasPageCount(int min, int max) {
+        checkDocumentOK();
         int actualPages = document.getNumberOfPages();
         if (actualPages < min || actualPages > max) {
             throw failure("page count not in range %d >[ %d ]> %d", min, actualPages, max);
@@ -394,6 +418,7 @@ public class PdfAssertions extends AbstractDocAssert<PdfAssertions> implements P
     }
 
     public PdfAssertions hasTextInPage(int pageNum, CharSequence search) {
+        checkDocumentOK();
         PDPage page = document.getPage(pageNum - 1);
 
         var pdfEngine = new Engine();
@@ -412,10 +437,14 @@ public class PdfAssertions extends AbstractDocAssert<PdfAssertions> implements P
     }
 
     public PdfAssertions hasTextInPage(int pageNum, CharSequence search, Rectangle2D area) {
+        checkDocumentOK();
+        checkValidPage(pageNum);
         return hasTextInPage(pageNum, search, area, false);
     }
 
     public PdfAssertions hasTextInPage(int pageNum, CharSequence search, Rectangle2D area, boolean fullyCovertArea) {
+        checkDocumentOK();
+        checkValidPage(pageNum);
         PDPage page = document.getPage(pageNum - 1);
 
         var pdfEngine = new Engine();
@@ -446,4 +475,111 @@ public class PdfAssertions extends AbstractDocAssert<PdfAssertions> implements P
         throw failure("search string '%s' not found", search);
     }
 
+    public PdfAssertions hasPageSize(int pageNum, float width, float height) {
+        return hasPageSize(pageNum, new Rectangle2D.Float(0, 0, width, height));
+    }
+
+    public PdfAssertions hasPageSize(int pageNum, Rectangle2D expectedBox) {
+        checkDocumentOK();
+        checkValidPage(pageNum);
+
+        PDPage page = document.getPage(pageNum - 1);
+        PDRectangle mediaBox = page.getMediaBox();
+
+        final float EPS = 0.01f; // tolerance
+        float width = mediaBox.getWidth();
+        float height = mediaBox.getHeight();
+
+        if (Math.abs(width - expectedBox.getWidth()) > EPS ||
+            Math.abs(height - expectedBox.getHeight()) > EPS) {
+            throw failure(
+                "page %d size %f × %f pt differs from expected %f × %f pt",
+                pageNum, width, height,
+                expectedBox.getWidth(), expectedBox.getHeight()
+            );
+        }
+        return this;
+    }
+
+    public PdfAssertions hasPageWidth(int pageNum, float expectedSize) {
+        checkDocumentOK();
+        checkValidPage(pageNum);
+
+        PDPage page = document.getPage(pageNum - 1);
+        PDRectangle mediaBox = page.getMediaBox();
+
+        final float EPS = 0.01f; // tolerance
+        float actualSize = mediaBox.getWidth();
+
+        if (Math.abs(actualSize - expectedSize) > EPS) {
+            throw failure(
+                "page %d width %f pt differs from expected %f pt",
+                pageNum, actualSize, expectedSize
+            );
+        }
+        return this;
+    }
+
+    public PdfAssertions hasPageHeight(int pageNum, float expectedSize) {
+        checkDocumentOK();
+        checkValidPage(pageNum);
+
+        PDPage page = document.getPage(pageNum - 1);
+        PDRectangle mediaBox = page.getMediaBox();
+
+        final float EPS = 0.01f; // tolerance
+        float actualSize = mediaBox.getHeight();
+
+        if (Math.abs(actualSize - expectedSize) > EPS) {
+            throw failure(
+                "page %d height %f pt differs from expected %f pt",
+                pageNum, actualSize, expectedSize
+            );
+        }
+        return this;
+    }
+
+    public PdfAssertions isPdfA() {
+        return isPdfA(false, null);
+    }
+
+    public PdfAssertions isPdfA(boolean strict, String version) {
+        checkDocumentOK();
+
+        PDMetadata metadata = document.getDocumentCatalog().getMetadata();
+        if (metadata == null) {
+            throw failure("no XMP metadata found in document");
+        }
+
+        try {
+            XMPMeta xmp = XMPMetaFactory.parseFromBuffer(metadata.toByteArray());
+
+            String namespace = "http://www.aiim.org/pdfa/ns/id/";
+
+            String part = xmp.getPropertyString(namespace, "part");
+            String conformance = xmp.getPropertyString(namespace, "conformance");
+
+            if (part == null || conformance == null) {
+                throw failure(
+                    "PDF/A metadata incomplete: part=%s, conformance=%s",
+                    part, conformance
+                );
+            }
+            if (strict) {
+                if (version == null) {
+                    if (!"a".equalsIgnoreCase(conformance)) {
+                        throw failure("not a pdf/a: %s", conformance);
+                    }
+                }
+                else if (!version.equalsIgnoreCase(part) || !"a".equalsIgnoreCase(conformance)) {
+                    throw failure("not in allowed version: %s/%s", part, conformance);
+                }
+            }
+        }
+        catch (IOException | XMPException e) {
+            throw failure("error reading PDF/A metadata: %s", e.getMessage());
+        }
+
+        return this;
+    }
 }

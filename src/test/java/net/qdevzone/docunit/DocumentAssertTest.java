@@ -126,4 +126,12 @@ class DocumentAssertTest {
         });
     }
 
+    @Test
+    void testCustomInfo() {
+        AssertionError error = assertThrows(AssertionError.class, () -> {
+            DocAssertions.assertDoc(new byte[] {}).describedAs("Test123").isNotEmpty();
+        });
+        assertThat(error.getMessage()).startsWith("[Test123]");
+    }
+
 }

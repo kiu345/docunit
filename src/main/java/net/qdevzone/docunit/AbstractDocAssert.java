@@ -5,6 +5,8 @@ import java.util.Arrays;
 
 import org.assertj.core.api.AbstractAssert;
 import org.assertj.core.api.WritableAssertionInfo;
+import org.assertj.core.description.Description;
+import org.assertj.core.description.TextDescription;
 import org.assertj.core.error.MessageFormatter;
 import org.assertj.core.internal.Failures;
 import org.assertj.core.presentation.Representation;
@@ -114,6 +116,20 @@ public abstract class AbstractDocAssert<SELF extends Assert<SELF>> implements As
                 throw failure("in values");
             }
         }
+        return myself;
+    }
+
+    public SELF describedAs(String description) {
+        info.description(new TextDescription(description));
+        return myself;
+    }
+
+    public SELF describedAs(String description, Object... args) {
+        return describedAs(new TextDescription(description, args));
+    }
+
+    public SELF describedAs(Description description) {
+        info.description(description);
         return myself;
     }
 
