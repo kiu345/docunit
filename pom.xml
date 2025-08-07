@@ -7,19 +7,33 @@
     <version>0.0.1-SNAPSHOT</version>
     <name>Document unit tests</name>
     <description>DocUnit - unit test asserts for (binary) document output like PDF, PNG oder ZIP</description>
-    <url>http://docunit.qdevzone.net</url>
+    <url>https://github.com/kiu345/docunit</url>
     <scm>
         <connection>scm:git:https://github.com/kiu345/docunit.git</connection>
         <developerConnection>scm:git:https://github.com/kiu345/docunit.git</developerConnection>
         <url>https://github.com/kiu345/docunit/tree/main</url>
     </scm>
 
+    <licenses>
+        <license>
+            <name>Eclipse Public License - v2.0</name>
+            <url>https://www.eclipse.org/legal/epl-2.0/</url>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <name>Stefan Daurer</name>
+            <email>s.daurer@q-spot.org</email>
+        </developer>
+    </developers>
 
     <properties>
         <argLine></argLine>
         <java.version>17</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <project.inceptionYear>2025</project.inceptionYear>
 
         <commons.csv.version>1.14.1</commons.csv.version>
         <jsonpath.version>2.9.0</jsonpath.version>
@@ -252,7 +266,7 @@
                 </executions>
             </plugin>
 
-            <!-- Build-Helper (für Release-Flow) -->
+            <!-- Build-Helper (for Release-Flow) -->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>build-helper-maven-plugin</artifactId>
@@ -338,6 +352,39 @@
                     </execution>
                 </executions>
             </plugin>
+
+            <!-- License headers -->
+            <plugin>
+                <groupId>com.mycila</groupId>
+                <artifactId>license-maven-plugin</artifactId>
+                <version>5.0.0</version>
+                <configuration>
+                    <licenseSets>
+                        <licenseSet>
+                            <inlineHeader><![CDATA[
+Copyright (c) ${project.inceptionYear}-${currentYear} the original author or authors
+
+See the README file(s) distributed with this work for additional information.
+
+This program and the accompanying materials are made available under the
+terms of the Eclipse Public License 2.0 which is available at
+http://www.eclipse.org/legal/epl-2.0
+
+SPDX-License-Identifier: EPL-2.0
+          ]]></inlineHeader>
+                            <includes>
+                                <include>src/**/*.java</include>
+                            </includes>
+                            <excludes>
+                            </excludes>
+                        </licenseSet>
+                    </licenseSets>
+                    <properties>
+                        <currentYear>2025</currentYear>
+                    </properties>
+                    <strictCheck>true</strictCheck>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
@@ -393,6 +440,66 @@
                                 <phase>verify</phase>
                                 <goals>
                                     <goal>check</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <id>central</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>3.2.8</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>org.sonatype.central</groupId>
+                        <artifactId>central-publishing-maven-plugin</artifactId>
+                        <version>0.8.0</version>
+                        <extensions>true</extensions>
+                        <configuration>
+                            <publishingServerId>central</publishingServerId>
+                        </configuration>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>3.11.2</version>
+                        <executions>
+                            <execution>
+                                <id>attach-javadocs</id>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-source-plugin</artifactId>
+                        <version>3.3.1</version>
+                        <executions>
+                            <execution>
+                                <id>attach-sources</id>
+                                <goals>
+                                    <goal>jar-no-fork</goal>
                                 </goals>
                             </execution>
                         </executions>
