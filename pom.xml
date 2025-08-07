@@ -3,7 +3,7 @@
 
     <groupId>net.qdevzone</groupId>
     <artifactId>docunit</artifactId>
-    <version>0.0.1</version>
+    <version>0.0.2-SNAPSHOT</version>
     <name>Document unit tests</name>
     <description>DocUnit - unit test asserts for (binary) document output like PDF, PNG oder ZIP</description>
     <url>https://github.com/kiu345/docunit</url>
@@ -11,7 +11,7 @@
         <connection>scm:git:https://github.com/kiu345/docunit.git</connection>
         <developerConnection>scm:git:https://github.com/kiu345/docunit.git</developerConnection>
         <url>https://github.com/kiu345/docunit/tree/main</url>
-      <tag>docunit-0.0.1</tag>
+      <tag>HEAD</tag>
   </scm>
 
     <licenses>
