@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
@@ -7,12 +8,6 @@
     <name>Document unit tests</name>
     <description>DocUnit - unit test asserts for (binary) document output like PDF, PNG oder ZIP</description>
     <url>https://github.com/kiu345/docunit</url>
-    <scm>
-        <connection>scm:git:https://github.com/kiu345/docunit.git</connection>
-        <developerConnection>scm:git:https://github.com/kiu345/docunit.git</developerConnection>
-        <url>https://github.com/kiu345/docunit/tree/main</url>
-      <tag>HEAD</tag>
-  </scm>
 
     <licenses>
         <license>
@@ -27,9 +22,17 @@
             <email>s.daurer@q-spot.org</email>
         </developer>
     </developers>
+    <scm>
+        <connection>scm:git:https://github.com/kiu345/docunit.git</connection>
+        <developerConnection>scm:git:https://github.com/kiu345/docunit.git</developerConnection>
+        <tag>HEAD</tag>
+        <url>https://github.com/kiu345/docunit/tree/main</url>
+    </scm>
+
+    <distributionManagement/>
 
     <properties>
-        <argLine />
+        <argLine/>
         <java.version>17</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -54,14 +57,7 @@
         <sonar.dependencyCheck.jsonReportPath>target/dependency-check-report.json</sonar.dependencyCheck.jsonReportPath>
     </properties>
 
-    <repositories>
-    </repositories>
-
-    <dependencyManagement>
-    </dependencyManagement>
-
-    <distributionManagement>
-    </distributionManagement>
+    <dependencyManagement/>
 
     <dependencies>
         <dependency>
@@ -160,6 +156,8 @@
         </dependency>
     </dependencies>
 
+    <repositories/>
+
     <build>
         <defaultGoal>package</defaultGoal>
 
@@ -218,13 +216,11 @@
                             </ignoreVersion>
                         </ignoreVersions>
                     </ruleSet>
-                    <excludeProperties>
-                        argLine,
+                    <excludeProperties>argLine,
                         java.version,
                         project.build.sourceEncoding,
                         sonar.version,
-                        sonar.projectKey
-                    </excludeProperties>
+                        sonar.projectKey</excludeProperties>
                     <properties>
                         <property>
                             <name>poi.version</name>
@@ -257,11 +253,11 @@
                 </configuration>
                 <executions>
                     <execution>
-                        <phase>validate</phase>
                         <goals>
                             <goal>display-dependency-updates</goal>
                             <goal>display-plugin-updates</goal>
                         </goals>
+                        <phase>validate</phase>
                     </execution>
                 </executions>
             </plugin>
@@ -294,6 +290,18 @@
                             <file>${project.basedir}/doc/codestyle/codestyle.xml</file>
                         </eclipse>
                     </java>
+                    <pom>
+                        <includes>
+                            <include>pom.xml</include>
+                        </includes>
+                        <sortPom>
+                            <encoding>UTF-8</encoding>
+                            <lineSeparator>\n</lineSeparator>
+                            <nrOfIndentSpace>4</nrOfIndentSpace>
+                            <predefinedSortOrder>recommended_2008_06</predefinedSortOrder>
+                        </sortPom>
+                    </pom>
+
                     <m2eEnableForIncrementalBuild>true</m2eEnableForIncrementalBuild>
                 </configuration>
             </plugin>
@@ -327,10 +335,10 @@
                     </execution>
                     <execution>
                         <id>report</id>
-                        <phase>verify</phase>
                         <goals>
                             <goal>report</goal>
                         </goals>
+                        <phase>verify</phase>
                     </execution>
                 </executions>
             </plugin>
@@ -345,10 +353,10 @@
                 </configuration>
                 <executions>
                     <execution>
-                        <phase>package</phase>
                         <goals>
                             <goal>makeBom</goal>
                         </goals>
+                        <phase>package</phase>
                     </execution>
                 </executions>
             </plugin>
@@ -375,8 +383,7 @@ SPDX-License-Identifier: EPL-2.0
                             <includes>
                                 <include>src/**/*.java</include>
                             </includes>
-                            <excludes>
-                            </excludes>
+                            <excludes/>
                         </licenseSet>
                     </licenseSets>
                     <properties>
@@ -437,10 +444,10 @@ SPDX-License-Identifier: EPL-2.0
                         </configuration>
                         <executions>
                             <execution>
-                                <phase>verify</phase>
                                 <goals>
                                     <goal>check</goal>
                                 </goals>
+                                <phase>verify</phase>
                             </execution>
                         </executions>
                     </plugin>
@@ -459,10 +466,10 @@ SPDX-License-Identifier: EPL-2.0
                         <executions>
                             <execution>
                                 <id>sign-artifacts</id>
-                                <phase>verify</phase>
                                 <goals>
                                     <goal>sign</goal>
                                 </goals>
+                                <phase>verify</phase>
                             </execution>
                         </executions>
                     </plugin>
