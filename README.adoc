@@ -27,6 +27,21 @@ Right now is's more or less a quick hack, for basic usage see the JUnit test fil
 
 == Example Usage
 
+Add the fragment to your `pom.xml`
+
+```xml
+...
+        <dependency>
+            <groupId>net.qdevzone</groupId>
+            <artifactId>docunit</artifactId>
+            <version>0.0.1</version>
+            <scope>test</scope>
+        </dependency>
+...
+```
+
+then do some testing
+
 ```java
 assertDoc(pdfBytes)
     .asPDF()
