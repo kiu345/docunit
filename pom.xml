@@ -4,7 +4,7 @@
 
     <groupId>net.qdevzone</groupId>
     <artifactId>docunit</artifactId>
-    <version>0.0.2-SNAPSHOT</version>
+    <version>0.0.3-SNAPSHOT</version>
     <name>Document unit tests</name>
     <description>DocUnit - unit test asserts for (binary) document output like PDF, PNG oder ZIP</description>
     <url>https://github.com/kiu345/docunit</url>
@@ -39,19 +39,19 @@
         <project.inceptionYear>2025</project.inceptionYear>
 
         <commons.csv.version>1.14.1</commons.csv.version>
-        <jsonpath.version>2.9.0</jsonpath.version>
-        <poi.version>5.4.1</poi.version>
-        <pdfbox.version>3.0.5</pdfbox.version>
-        <tika.version>3.2.1</tika.version>
+        <jsonpath.version>2.10.0</jsonpath.version>
+        <poi.version>5.5.1</poi.version>
+        <pdfbox.version>3.0.6</pdfbox.version>
+        <tika.version>3.2.3</tika.version>
         <twelvemonkeys.imageio.version>3.12.0</twelvemonkeys.imageio.version>
         <slf4j.version>2.0.17</slf4j.version>
 
-        <junit.version>5.13.4</junit.version>
+        <junit.version>5.14.1</junit.version>
         <junit-pioneer.version>2.3.0</junit-pioneer.version>
-        <assertj.version>3.27.3</assertj.version>
-        <xmlunit.version>2.10.3</xmlunit.version>
+        <assertj.version>3.27.6</assertj.version>
+        <xmlunit.version>2.11.0</xmlunit.version>
 
-        <sonar.version>5.1.0.4751</sonar.version>
+        <sonar.version>5.3.0.6276</sonar.version>
         <sonar.projectKey>docunit</sonar.projectKey>
         <sonar.dependencyCheck.htmlReportPath>target/dependency-check-report.html</sonar.dependencyCheck.htmlReportPath>
         <sonar.dependencyCheck.jsonReportPath>target/dependency-check-report.json</sonar.dependencyCheck.jsonReportPath>
@@ -166,7 +166,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.14.0</version>
+                <version>3.14.1</version>
                 <configuration>
                     <source>${java.version}</source>
                     <target>${java.version}</target>
@@ -178,7 +178,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-enforcer-plugin</artifactId>
-                <version>3.6.1</version>
+                <version>3.6.2</version>
                 <executions>
                     <execution>
                         <id>enforce</id>
@@ -203,7 +203,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>versions-maven-plugin</artifactId>
-                <version>2.18.0</version>
+                <version>2.20.1</version>
                 <configuration>
                     <generateBackupPoms>true</generateBackupPoms>
                     <processDependencyManagement>false</processDependencyManagement>
@@ -282,7 +282,7 @@
             <plugin>
                 <groupId>com.diffplug.spotless</groupId>
                 <artifactId>spotless-maven-plugin</artifactId>
-                <version>2.46.1</version>
+                <version>3.1.0</version>
                 <configuration>
                     <java>
                         <eclipse>
@@ -310,7 +310,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.5.3</version>
+                <version>3.5.4</version>
                 <configuration>
                     <parallel>methods</parallel>
                     <threadCount>2</threadCount>
@@ -325,7 +325,7 @@
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.13</version>
+                <version>0.8.14</version>
                 <executions>
                     <execution>
                         <id>prepare-agent</id>
@@ -411,7 +411,7 @@ SPDX-License-Identifier: EPL-2.0
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-failsafe-plugin</artifactId>
-                        <version>3.5.3</version>
+                        <version>3.5.4</version>
                         <executions>
                             <execution>
                                 <id>integration-tests</id>
@@ -427,7 +427,7 @@ SPDX-License-Identifier: EPL-2.0
                     <plugin>
                         <groupId>org.owasp</groupId>
                         <artifactId>dependency-check-maven</artifactId>
-                        <version>12.1.3</version>
+                        <version>12.1.9</version>
                         <configuration>
                             <nvdDatafeedUrl>${nvd.proxy.url}</nvdDatafeedUrl>
                             <failOnError>false</failOnError>
@@ -477,7 +477,7 @@ SPDX-License-Identifier: EPL-2.0
                     <plugin>
                         <groupId>org.sonatype.central</groupId>
                         <artifactId>central-publishing-maven-plugin</artifactId>
-                        <version>0.8.0</version>
+                        <version>0.9.0</version>
                         <extensions>true</extensions>
                         <configuration>
                             <publishingServerId>central</publishingServerId>
@@ -487,7 +487,7 @@ SPDX-License-Identifier: EPL-2.0
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
-                        <version>3.11.2</version>
+                        <version>3.12.0</version>
                         <executions>
                             <execution>
                                 <id>attach-javadocs</id>
@@ -501,7 +501,7 @@ SPDX-License-Identifier: EPL-2.0
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-source-plugin</artifactId>
-                        <version>3.3.1</version>
+                        <version>3.4.0</version>
                         <executions>
                             <execution>
                                 <id>attach-sources</id>
